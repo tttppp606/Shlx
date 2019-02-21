@@ -6,25 +6,27 @@
     <!--描述性说明-->
     <display-name>Archetype Created Web Application</display-name>
     <!--加载applicationContext.xml，将数据放入ServletContext中-->
+
+    <!--可选项-->
+    <!--RequestContextListener implements ServletRequestListener
+        ServletRequestListener监听HTTP请求事件，Web服务器接收的每次请求都会通知该监听器。
+        RequestContextListener将Spring容器与Web容器结合的更加密切-->
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <!-- 生产WebApplicationContext:web容器和Spring容器结合。
+        ContextLoaderListener实例化，调用一个叫initXXX的方法，读取ServletContext中applicationContext.xml的内容，
+        将Spring容器applicationContext与web容器融合，创建webapplicationContext-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:applicationContext.xml
         </param-value>
     </context-param>
-    <!--可选项-->
-<!--RequestContextListener implements ServletRequestListener
-    ServletRequestListener监听HTTP请求事件，Web服务器接收的每次请求都会通知该监听器。
-    RequestContextListener将Spring容器与Web容器结合的更加密切-->
-    <listener>
-        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
-<!-- 生产WebApplicationContext:web容器和Spring容器结合。
-    ContextLoaderListener实例化，调用一个叫initXXX的方法，读取ServletContext中applicationContext.xml的内容，
-    将Spring容器applicationContext与web容器融合，创建webapplicationContext-->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
 
     <filter>
         <filter-name>characterEncodingFilter</filter-name>

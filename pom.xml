@@ -7,10 +7,10 @@
     <artifactId>mmall</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <!--项目的名称, Maven产生的文档用 -->
+    <!--项目的名称, Maven产生的文档用,可选 -->
     <name>mmall Maven Webapp</name>
-    <!--？项目主页的URL, Maven产生的文档用 -->
-    <url>http://maven.apache.org</url>
+    <!--项目主页的URL, Maven产生的文档用，可选 -->
+    <url>http://www.lichuang321.xyz</url>
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,57 +21,57 @@
       <org.mybatis.version>3.4.1</org.mybatis.version>
       <org.mybatis.spring.version>1.3.0</org.mybatis.spring.version>
     </properties>
-
+<!--1、jar包-->
     <dependencies>
-
+      <!--tomcat-servlet-->
       <dependency>
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-servlet-api</artifactId>
         <version>7.0.64</version>
       </dependency>
-
+      <!--spring-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-oxm</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
-
-        <!--introduces advices to java classes-->
       <dependency>
-        <groupId>org.aspectj</groupId>
-        <artifactId>aspectjweaver</artifactId>
-        <version>1.7.3</version>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${org.springframework.version}</version>
       </dependency>
-
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+      <!--mybatis+Spring-->
       <dependency>
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis-spring</artifactId>
         <version>${org.mybatis.spring.version}</version>
       </dependency>
+      <!--mybatis-->
       <dependency>
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis</artifactId>
@@ -79,9 +79,20 @@
       </dependency>
       <!--spring aop-->
       <dependency>
+      <groupId>aopalliance</groupId>
+      <artifactId>aopalliance</artifactId>
+      <version>1.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
         <version>1.6.11</version>
+      </dependency>
+      <!--introduces advices to java classes，aop相关-->
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>1.7.3</version>
       </dependency>
       <!--序列化和反序列化-->
       <dependency>
@@ -97,7 +108,7 @@
         <!--<scope>runtime</scope>-->
       </dependency>
 
-<!--日志-->
+      <!--日志-->
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
@@ -110,103 +121,85 @@
         <version>1.1.2</version>
         <scope>compile</scope>
       </dependency>
-
+      <!--mysql-->
       <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>5.1.6</version>
       </dependency>
-<!--工具类，数据结构-->
+      <!--guava-->
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>20.0</version>
       </dependency>
-
-<!--工具类-->
+      <!--commons-lang3工具-->
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>3.5</version>
       </dependency>
-
-<!--工具类-->
+      <!--commons-collections工具-->
       <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
         <version>3.2.1</version>
       </dependency>
-
-
+      <!--junit-->
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.12</version>
         <!--<scope>test</scope>-->
       </dependency>
-<!--时间处理-->
+      <!--时间处理DateUtils-->
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>2.3</version>
       </dependency>
-
-
-      <!-- id加密解密 -->
+      <!-- ？？？id加密解密 -->
       <dependency>
         <groupId>org.hashids</groupId>
         <artifactId>hashids</artifactId>
         <version>1.0.1</version>
       </dependency>
-
-
       <!-- ftpclient -->
       <dependency>
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
         <version>3.1</version>
       </dependency>
-
       <!-- file upload 通过SpringMVC上传的配置 -->
-
       <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>1.2.2</version>
       </dependency>
-
+      <!--commons-io工具-->
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>2.0.1</version>
       </dependency>
-
-
-
-
       <!-- mybatis pager分页插件 -->
-
       <dependency>
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper</artifactId>
         <version>4.1.0</version>
       </dependency>
-
       <dependency>
         <groupId>com.github.miemiedev</groupId>
         <artifactId>mybatis-paginator</artifactId>
         <version>1.2.17</version>
       </dependency>
-
       <dependency>
         <groupId>com.github.jsqlparser</groupId>
         <artifactId>jsqlparser</artifactId>
         <version>0.9.4</version>
       </dependency>
-
-
-      <!-- alipay 支付宝-->
+      <!-- alipay 支付宝：支付宝官网的当面付demo中的通用jar包（中央仓库有的jar包）-->
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
@@ -242,7 +235,7 @@
         <artifactId>hamcrest-core</artifactId>
         <version>1.3</version>
       </dependency>
-
+      <!--redis相关-->
       <dependency>
         <groupId>redis.clients</groupId>
         <artifactId>jedis</artifactId>
@@ -250,7 +243,7 @@
       </dependency>
     </dependencies>
 
-
+  <!--2、插件-->
     <build>
         <!--产生的构件的文件名，默认值<finalName/>是${artifactId}-${version}。 -->
       <finalName>mmall</finalName>
@@ -279,6 +272,7 @@
               当发布到网上时，通过maven的编译引入支付宝SDK-->
               <!--最好的做法是建立私服仓库-->
             <compilerArguments>
+              <!--让这个目录下的所有jar包都参与编译-->
               <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
             </compilerArguments>
           </configuration>

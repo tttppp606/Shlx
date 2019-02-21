@@ -39,14 +39,13 @@
         </javaTypeResolver>
 
 
-        <!-- 5、Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+        <!-- 5、pojo生成器:用来生成含有主键key的pojo类，记录类以及查询Example类
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <!--<javaModelGenerator targetPackage="com.mmall.pojo" targetProject=".\src\main\java">-->
         <!--??./src/main/java-->
         <javaModelGenerator targetPackage="com.mmall.pojo" targetProject="./src/main/java">
-            <!-- ？？？是否允许子包，即targetPackage.schemaName.tableName -->
+            <!--???是否允许子包，即targetPackage.schemaName.tableName;是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="true"/>
@@ -56,32 +55,29 @@
             <property name="immutable" value="false"/>
         </javaModelGenerator>
 
-        <!--6、生成Mapper映射XML文件位置: 为每一个数据库的表生成对应的SqlMap文件 -->
-        <!--<sqlMapGenerator targetPackage="mappers" targetProject=".\src\main\resources">-->
+        <!-- 6、生成mapper.java接口文件
+                type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
+                type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
+                type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.mmall.dao" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!--7、生成Mapper.xml文件 -->
         <sqlMapGenerator targetPackage="mappers" targetProject="./src/main/resources">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
-        <!-- 7、客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
-                type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
-                type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
-                type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
-        -->
-
-        <!-- targetPackage：mapper接口dao生成的位置 -->
-        <!--<javaClientGenerator type="XMLMAPPER" targetPackage="com.mmall.dao" targetProject=".\src\main\java">-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.mmall.dao" targetProject="./src/main/java">
-            <!-- enableSubPackages:是否让schema作为包的后缀 -->
-            <property name="enableSubPackages" value="false" />
-        </javaClientGenerator>
-
-        <!-- 8、tableName:要生成的表名；
-                domainObjectName:生成后的实例名；
-                enableCountByExample:Count语句中加入where条件查询，默认为true开启；
-                enableUpdateByExample:Update语句中加入where条件查询，默认为true开启；
-                enableDeleteByExample:Delete语句中加入where条件查询，默认为true开启；
-                enableSelectByExample:Select多条语句中加入where条件查询，默认为true开启；
-                selectByExampleQueryId:Select单个对象语句中加入where条件查询，默认为true开启 -->
+        <!-- 8、编写以上三种文件的一些规范
+                （1）tableName:要生成的表名；
+                （2）domainObjectName:生成后的实例名=pojo的名字；
+                （3）是否在mapper.xml中自动生成相关的sql语句，简单的sql语句默认已经生成；
+                     enableCountByExample:Count语句中加入where条件查询，默认为true开启；
+                     enableUpdateByExample:Update语句中加入where条件查询，默认为true开启；
+                     enableDeleteByExample:Delete语句中加入where条件查询，默认为true开启；
+                     enableSelectByExample:Select多条语句中加入where条件查询，默认为true开启；
+                     selectByExampleQueryId:Select单个对象语句中加入where条件查询，默认为true开启
+                 （4）table标签的columnOverride元素：规定sql，jdbc，java的数据类型转换关系-->
         <table tableName="mmall_shipping" domainObjectName="Shipping" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="mmall_cart" domainObjectName="Cart" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="mmall_cart_item" domainObjectName="CartItem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
