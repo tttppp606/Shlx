@@ -9,7 +9,7 @@ import java.util.List;
 public class OrderProductVo {
     private BigDecimal productTotalPrice;
     private String imageHost;
-    private List<OrderItemVo> orderItemVoList;
+    private List<OrderItemVo1> orderItemVo1List;
 
     public BigDecimal getProductTotalPrice() {
         return productTotalPrice;
@@ -27,11 +27,11 @@ public class OrderProductVo {
         this.imageHost = imageHost;
     }
 
-    public List<OrderItemVo> getOrderItemVoList() {
-        return orderItemVoList;
+    public List<OrderItemVo1> getOrderItemVo1List() {
+        return orderItemVo1List;
     }
 
-    public void setOrderItemVoList(List<OrderItemVo> orderItemVoList) {
-        this.orderItemVoList = orderItemVoList;
+    public void setOrderItemVo1List(List<OrderItemVo1> orderItemVo1List) {
+        this.orderItemVo1List = orderItemVo1List;
     }
 }

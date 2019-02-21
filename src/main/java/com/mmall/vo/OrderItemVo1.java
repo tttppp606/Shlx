@@ -3,9 +3,9 @@ package com.mmall.vo;
 import java.math.BigDecimal;
 
 /**
- * Created by tttppp606 on 2019/2/18.
+ * Created by tttppp606 on 2019/2/22.
  */
-public class OrderItemVo {
+public class OrderItemVo1 {
     private Long orderNo;
 
     private Integer productId;

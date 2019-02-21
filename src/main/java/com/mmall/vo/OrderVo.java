@@ -29,7 +29,7 @@ public class OrderVo {
 
     private String createTime;
 
-    private List<OrderItemVo> orderItemVoList;
+    private List<OrderItemVo1> orderItemVo1List;
 
     private Integer shippingId;
 
@@ -134,12 +134,12 @@ public class OrderVo {
         this.createTime = createTime;
     }
 
-    public List<OrderItemVo> getOrderItemVoList() {
-        return orderItemVoList;
+    public List<OrderItemVo1> getOrderItemVo1List() {
+        return orderItemVo1List;
     }
 
-    public void setOrderItemVoList(List<OrderItemVo> orderItemVoList) {
-        this.orderItemVoList = orderItemVoList;
+    public void setOrderItemVo1List(List<OrderItemVo1> orderItemVo1List) {
+        this.orderItemVo1List = orderItemVo1List;
     }
 
     public Integer getShippingId() {

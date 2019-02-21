@@ -20,9 +20,9 @@ import com.mmall.pojo.*;
 import com.mmall.service.IOrderService;
 import com.mmall.util.BigDecimalUtil;
 import com.mmall.util.DateTimeUtil;
-import com.mmall.util.FTPUtil;
+import com.mmall.util.FTPUtil1;
 import com.mmall.util.PropertiesUtil;
-import com.mmall.vo.OrderItemVo;
+import com.mmall.vo.OrderItemVo1;
 import com.mmall.vo.OrderProductVo;
 import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
@@ -160,7 +160,7 @@ public class OrderServiceImpl implements IOrderService {
                 ArrayList<File> files = new ArrayList<>();
                 files.add(file);
                 try {
-                    FTPUtil.upLoad(files);
+                    FTPUtil1.upLoad(files);
                 } catch (IOException e) {
                     logger.error("二维码上传异常");
                     e.printStackTrace();
@@ -273,8 +273,8 @@ public class OrderServiceImpl implements IOrderService {
             return orderItemListResult;
         }
         List<OrderItem> orderItemList = orderItemListResult.getData();
-        List<OrderItemVo> orderItemVoList = this.assembleOrderItemVoList(orderItemList);
-        orderProductVo.setOrderItemVoList(orderItemVoList);
+        List<OrderItemVo1> orderItemVo1List = this.assembleOrderItemVoList(orderItemList);
+        orderProductVo.setOrderItemVo1List(orderItemVo1List);
 
         return ServerResponse.createBySuccess(orderProductVo);
     }
@@ -549,23 +549,23 @@ public class OrderServiceImpl implements IOrderService {
         return ServerResponse.createBySuccess(totalProductPrice);
     }
 
-    private List<OrderItemVo> assembleOrderItemVoList(List<OrderItem> orderItemList){
-        List<OrderItemVo> orderItemVoList = new ArrayList<>();
+    private List<OrderItemVo1> assembleOrderItemVoList(List<OrderItem> orderItemList){
+        List<OrderItemVo1> orderItemVo1List = new ArrayList<>();
         for (OrderItem orderItem : orderItemList) {
-            OrderItemVo orderItemVo = new OrderItemVo();
+            OrderItemVo1 orderItemVo1 = new OrderItemVo1();
 
-            orderItemVo.setOrderNo(orderItem.getOrderNo());
-            orderItemVo.setProductId(orderItem.getProductId());
-            orderItemVo.setProductName(orderItem.getProductName());
-            orderItemVo.setProductImage(orderItem.getProductImage());
-            orderItemVo.setCurrentUnitPrice(orderItem.getCurrentUnitPrice());
-            orderItemVo.setQuantity(orderItem.getQuantity());
-            orderItemVo.setTotalPrice(orderItem.getTotalPrice());
-            orderItemVo.setCreateTime(DateTimeUtil.dateToStr(orderItem.getCreateTime()));
+            orderItemVo1.setOrderNo(orderItem.getOrderNo());
+            orderItemVo1.setProductId(orderItem.getProductId());
+            orderItemVo1.setProductName(orderItem.getProductName());
+            orderItemVo1.setProductImage(orderItem.getProductImage());
+            orderItemVo1.setCurrentUnitPrice(orderItem.getCurrentUnitPrice());
+            orderItemVo1.setQuantity(orderItem.getQuantity());
+            orderItemVo1.setTotalPrice(orderItem.getTotalPrice());
+            orderItemVo1.setCreateTime(DateTimeUtil.dateToStr(orderItem.getCreateTime()));
 
-            orderItemVoList.add(orderItemVo);
+            orderItemVo1List.add(orderItemVo1);
         }
-        return orderItemVoList;
+        return orderItemVo1List;
     }
 
     private ShippingVo assembleShippingVo(Shipping shipping){
@@ -597,7 +597,7 @@ public class OrderServiceImpl implements IOrderService {
         orderVo.setCloseTime(DateTimeUtil.dateToStr(order.getCloseTime()));
         orderVo.setCreateTime(DateTimeUtil.dateToStr(order.getCreateTime()));
 
-        orderVo.setOrderItemVoList(this.assembleOrderItemVoList(orderItemList));
+        orderVo.setOrderItemVo1List(this.assembleOrderItemVoList(orderItemList));
         orderVo.setShippingId(order.getShippingId());
 
         Shipping shipping = shippingMapper.selectByPrimaryKey(order.getShippingId());
