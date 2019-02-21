@@ -25,17 +25,17 @@ public class FTPUtil {
 //  因为要用类直接调用方法，所以此处必须是静态方法！！！
     public static void upLoad(ArrayList<File> fileArrayList) throws IOException {
         logger.info("开始连接ftp服务器");
-        upLoad(ftpDir,fileArrayList);
+        upLoadDetail(ftpDir,fileArrayList);
         logger.info("结束上传");
     }
 
-    private static void upLoad(String remotePath,ArrayList<File> fileArrayList) throws IOException {
+    private static void upLoadDetail(String remotePath,ArrayList<File> fileArrayList) throws IOException {
         //连接ftp服务器
         FileInputStream fis = null;
 
         connectServer(ftpIp,21,ftpUser,ftpPass);
         try {
-            ftpClient.changeWorkingDirectory(ftpDir);//设置存放上传文件的子目录
+            ftpClient.changeWorkingDirectory(remotePath);//设置存放上传文件的子目录
             ftpClient.setBufferSize(1024);
             ftpClient.setControlEncoding("UTF-8");
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);//二进制
