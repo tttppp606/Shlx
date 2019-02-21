@@ -13,8 +13,8 @@ import java.util.ArrayList;
 /**
  * Created by tttppp606 on 2019/1/31.
  */
-public class FTPUtil1 {
-    private static  final Logger logger = LoggerFactory.getLogger(FTPUtil1.class);
+public class FTPUtil {
+    private static  final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
 
     private static FTPClient ftpClient = null;
     private static String ftpIp = PropertiesUtil.getProperty("ftp.server.ip");

@@ -2,7 +2,7 @@ package com.mmall.service.impl;
 
 import com.mmall.common.ServerResponse;
 import com.mmall.service.IFileService;
-import com.mmall.util.FTPUtil1;
+import com.mmall.util.FTPUtil;
 import com.mmall.util.PropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public class FileServiceImpl implements IFileService {
              * 输入：远程ftp服务器里存放上传文件的文件夹下的一个文件夹名字，文件list
              * 返回：上传成功就正常返回，不成功，在FtpUtil会抛出异常，这里捕获，输入日志不正常
              */
-             FTPUtil1.upLoad(fileArrayList);
+             FTPUtil.upLoad(fileArrayList);
 //             删除临时文件
              targetFile.delete();
         } catch (IOException e) {

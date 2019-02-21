@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by tttppp606 on 2019/2/22.
  */
-public class OrderItemVo1 {
+public class OrderItemVo {
     private Long orderNo;
 
     private Integer productId;
