@@ -58,7 +58,7 @@ public class FileServiceImpl implements IFileService {
         }
         HashMap<String, String> map = new HashMap<>();
         map.put("uri",targetFile.getName());
-        String prefix = PropertiesUtil.getProperty("ftp.server.http.prefix");
+        String prefix = PropertiesUtil.getProperty("ftp.server.http.prefix" + PropertiesUtil.getProperty("ftp.dir") + "/");
         map.put("url",prefix+targetFile.getName());
 
         return ServerResponse.createBySuccess(map);
