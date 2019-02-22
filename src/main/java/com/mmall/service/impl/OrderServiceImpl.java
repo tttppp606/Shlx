@@ -165,7 +165,7 @@ public class OrderServiceImpl implements IOrderService {
                     logger.error("二维码上传异常");
                     e.printStackTrace();
                 }
-                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix");
+                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix")  + file.getName();
 
                 //新建map，返回给前端的数据
                 HashMap<String, String> map = new HashMap<>();
