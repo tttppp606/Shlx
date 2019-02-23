@@ -203,6 +203,7 @@ public class OrderServiceImpl implements IOrderService {
             order.setStatus(Const.OrderStatusEnum.PAID.getCode());
             //在controller中将data类型的转为String类型了，而数据库是date类型，需要把String类型转换为数据库的date类型
             order.setUpdateTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
+            order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
             orderMapper.updateByPrimaryKeySelective(order);
         }
         //生成支付信息表
