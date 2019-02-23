@@ -9,10 +9,12 @@ import java.util.Set;
  * Created by tttppp606 on 2019/1/25.
  */
 public class Const {
+    //session中的key
     public static final String CURRENT_USER = "currentUser";
+   //检查username和email是否重复时，checkVaild的两种类型
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
-
+   //检测是否是管理员
     public interface Role{
         int ROLE_CUSTOMER = 0;
         int ROLE_ADMIN = 1;

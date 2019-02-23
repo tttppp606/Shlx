@@ -18,7 +18,7 @@ public class TokenCache {
     public static final String TOKEN_PREFIX = "token_";
 
     private static LoadingCache<String,String> localCache = CacheBuilder
-            .newBuilder()//设置缓存容器的初始容量
+            .newBuilder()
             .initialCapacity(1000)//设置缓存容器的初始容量
             .maximumSize(10000)//设置缓存最大容量，超过之后就会按照使用LRU算法来移除缓存项
             .expireAfterAccess(12, TimeUnit.HOURS)//设置缓冲12小时后过期

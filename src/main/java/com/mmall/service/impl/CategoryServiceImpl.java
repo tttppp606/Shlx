@@ -91,8 +91,10 @@ public class CategoryServiceImpl implements ICategoryService {
             return totalCategorySet;
             }
         totalCategorySet.add(category);
+        //查询下一级分类的数据，放入集合中
         List<Category> childrenList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         /**   MyBatis查询不到结果，返回值也不是null,而是一个没有元素的空集合，所以不需要对结果集合判断是否为null*/
+        //遍历下一级分类，查询下下一级分类的数据，并递归查询
         for (Category category1 : childrenList) {
             findChildrenCategoryList(totalCategorySet,category1.getId());
         }

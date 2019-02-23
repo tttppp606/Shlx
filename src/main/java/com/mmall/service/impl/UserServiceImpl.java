@@ -132,7 +132,7 @@ public class UserServiceImpl implements IUserService {
         而token是一个随机数，存在缓存中，并设置了存储在缓存中的时间*/
         if(checkAnswer > 0){
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetToken);
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username,forgetToken);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -154,7 +154,7 @@ public class UserServiceImpl implements IUserService {
         if (StringUtils.isBlank(token)){
             return ServerResponse.createByErrorMessage("token无效或过期");
         }
-//      判断前端传来的token与本地缓存的token是否一样，验证前台是用户本人
+//      判断前端传来的forgetToken与username的token是否一样，验证前台是用户本人
         if(StringUtils.equals(forgetToken,token)){//比str1.equals(str2);好，防止空指针
             String md5Password = MD5Util.MD5EncodeUtf8(passwordNew);
             int rowCount = userMapper.updatePasswordByUsername(username, md5Password);
