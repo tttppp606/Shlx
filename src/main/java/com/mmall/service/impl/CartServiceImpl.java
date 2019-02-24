@@ -122,22 +122,24 @@ public class CartServiceImpl implements ICartService {
         if(userId == null){
             return null;
         }
+        //1、查询购物车数据库，获得cartList
         List<Cart> cartList = cartMapper.selectByUserId(userId);
         if (CollectionUtils.isEmpty(cartList)){
             return null;
         }
+        //2、获取cartProductVoList
         ArrayList<CartProductVo> cartProductVoList = new ArrayList<>();
         BigDecimal totalPrice = new BigDecimal("0");//String参数，以后计算不会丢失精度
-//        遍历该用户的所有cart，并且建立cartProductVo的list，给最后的vo做元素
+        // 遍历cartList
         for (Cart cartItem : cartList) {
-                //判断购物车数量和库存数量关系
+                //组装cartProductVo
                 Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
                 if (product != null){
                     CartProductVo cartProductVo = new CartProductVo();
                     cartProductVo.setId(cartItem.getId());
                     cartProductVo.setUserId(userId);
                     cartProductVo.setProductId(cartItem.getProductId());
-
+                    //判断购物车数量和库存数量关系
                     Integer stock = product.getStock();
                     if (cartItem.getQuantity() > stock){
                         cartProductVo.setLimitQuantity(Const.Cart.LIMIT_NUM_FAIL);
@@ -157,11 +159,11 @@ public class CartServiceImpl implements ICartService {
                     cartProductVo.setProductStatus(product.getStatus());
                     cartProductVo.setProductStock(product.getStock());
                     cartProductVo.setProductChecked(cartItem.getChecked());
-//                  计算单个商品金额
+                    //计算单个商品金额
                     cartProductVo.setProductTotalPrice(BigDecimalUtil.mul(product.getPrice().doubleValue(),cartProductVo.getQuantity()));
-
+                    //迭代组装cartProductVoList
                     cartProductVoList.add(cartProductVo);
-//                  被单选的购物车商品，才会计入总价
+                    //迭代计算购物车中被勾选商品的总价格
                     if (cartProductVo.getProductChecked() == Const.Cart.CHECKED){
                         totalPrice = BigDecimalUtil.add(totalPrice.doubleValue(),cartProductVo.getProductTotalPrice().doubleValue());
                     }
@@ -169,6 +171,7 @@ public class CartServiceImpl implements ICartService {
                     cartMapper.deleteByUserIdProductId(userId,cartItem.getProductId());
                 }
         }
+        //3、组装cartVo
         CartVo cartVo = new CartVo();
         cartVo.setCartProductVoList(cartProductVoList);
         cartVo.setAllChecked(this.getAllCheckedStatus(userId));
