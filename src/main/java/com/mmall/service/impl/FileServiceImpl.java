@@ -31,11 +31,11 @@ public class FileServiceImpl implements IFileService {
         String uploadFileName = UUID.randomUUID().toString()+suffix;
 
         //2、根据控制层传来的项目根路径，建立一个文件（需要路径+文件名）
-//        File fileDir = new File(path);
-//        if (!fileDir.exists()){//判断文件是否存在，用exists()方法
-//            fileDir.setWritable(true);//针对centos系统，没有在tomcat上创建文件的权限
-//            fileDir.mkdirs();
-//        }
+        File fileDir = new File(path);
+        if (!fileDir.exists()){//判断文件是否存在，用exists()方法
+            fileDir.setWritable(true);//针对centos系统，没有在tomcat上创建文件的权限
+            fileDir.mkdirs();
+        }
         File targetFile = new File(path, uploadFileName);
         //3、将上传文件导入新建立的目标文件
         try {

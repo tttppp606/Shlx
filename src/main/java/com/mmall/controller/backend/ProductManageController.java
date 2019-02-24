@@ -132,6 +132,7 @@ public class ProductManageController {
         map.put("success",true);
         map.put("msg","上传成功");
         map.put("file_path",url);
+        //响应头中加入的键值对，是与前端的要求
         response.addHeader("Access-Control-Allow-Headers","X-File-Name");
         return map;
     }
