@@ -8,7 +8,7 @@ public enum ResponseCode {
     SUCCESS(0,"SUCCESS"),
     ERROR(1,"ERROR"),
     NEED_LOGIN(10,"NEED_LOGIN"),
-    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARDUMENT");
+    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARDUMENT");//前端传入的参数不合法的时候，返回的信息
 
     //code对应0、1、10、2=status，desc对应状态的说明，相当于默认的msg，但一般msg会自己编写说明
     private final int code;

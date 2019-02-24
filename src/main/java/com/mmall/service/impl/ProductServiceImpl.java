@@ -36,7 +36,6 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ServerResponse addOrUpdateProduct(Product product) {
-        System.out.println(product.toString());
         if (product != null) {
             if (StringUtils.isNotBlank(product.getSubImages())) {
                 //以，分割为数组,这里的逗号必须与请求中的逗号对应
