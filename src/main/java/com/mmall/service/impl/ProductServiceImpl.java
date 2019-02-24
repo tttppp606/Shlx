@@ -118,7 +118,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ServerResponse getProductDetail(Integer productId) {
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
         if (productId == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -164,7 +164,8 @@ public class ProductServiceImpl implements IProductService {
             ProductDetailVo productDetailVo = this.assembleProductDetailVo(product);
             productDetailVoList.add(productDetailVo);
         }
-        PageInfo pageInfo = new PageInfo(productDetailVoList);
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productDetailVoList);
 
         return ServerResponse.createBySuccess(pageInfo);
     }
