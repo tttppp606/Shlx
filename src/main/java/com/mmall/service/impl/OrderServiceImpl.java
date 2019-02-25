@@ -260,7 +260,7 @@ public class OrderServiceImpl implements IOrderService {
     public ServerResponse getOrderCartProduct(Integer userId) {
         OrderProductVo orderProductVo = new OrderProductVo();
         //1、设置ImageHost
-        orderProductVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.dir"));
+        orderProductVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         //2、设置ProductTotalPrice
         ServerResponse<BigDecimal> paymentResult = this.getTotalProductPrice(userId);
         if (!paymentResult.isSuccess()){
