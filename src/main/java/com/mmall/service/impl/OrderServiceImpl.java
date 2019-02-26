@@ -608,7 +608,7 @@ public class OrderServiceImpl implements IOrderService {
             orderVo.setReceiverName(this.assembleShippingVo(shipping).getReceiverName());
         }
 
-        orderVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.dir"));
+        orderVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
 
         return orderVo;
     }

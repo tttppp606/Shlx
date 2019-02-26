@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com</groupId>
     <artifactId>mmall</artifactId>
+    <!--默认jar包-->
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <!--项目的名称, Maven产生的文档用,可选 -->
@@ -279,9 +280,7 @@
           </configuration>
         </plugin>
       </plugins>
-
     </build>
-
 
 </project>
 
