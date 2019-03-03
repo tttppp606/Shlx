@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 /**
@@ -44,7 +43,7 @@ public class PropertiesUtil {
         }
         return value.trim();
     }
-    //通过key获得value，value不存在，返回传入的默认值defaultValue
+    //key对应的value不存在，则用默认值defaultValue，防止别人把properties中的东西误删，所以用这个方法，而不用上面的方法
     public static String getProperty(String key,String defaultValue){
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){

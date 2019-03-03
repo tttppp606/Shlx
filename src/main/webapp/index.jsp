@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
+Tomcat111111111111111
 SpringMVC文件上传
 <form name="form1" action="/manage/product/upload.do" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />

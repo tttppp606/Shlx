@@ -5,12 +5,17 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -23,33 +28,44 @@ public class UserController {
     @Autowired//根据类型找
     private IUserService iUserService;
 
+
     /**
-     * 登录
+     * 登陆，new Cookie，放缓存
      * @param username
      * @param password
      * @param session
-     * @return status msg data
+     * @param httpServletResponse
+     * @return
      */
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session){
-//        返回的user放入session中，这样用户长时间登陆后，到时间会自动清除用户的sesion，防止长时间没在，还能修改密码的漏洞
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpServletResponse){
+
         ServerResponse<User> response = iUserService.login(username, password);
         if(response.isSuccess()){
-            session.setAttribute(Const.CURRENT_USER,response.getData());
+            //新建一个Cookie：COOKIE_NAME = session.getId()
+            CookieUtil.writeLoginToken(httpServletResponse,session.getId());
+            //将session.getId() = User对象 放入Redis缓存中
+            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+
+            // 返回的user放入session中，这样用户长时间登陆后，到时间会自动清除用户的sesion，防止长时间没在，还能修改密码的漏洞
+            // session.setAttribute(Const.CURRENT_USER,response.getData());
         }
         return response;
     }
 
+
     /**
-     * 登出:就是把session里的当前用户信息删除
-     * @param session
-     * @return status
+     * 将Cookie里的login_token = xxxx删除，再次登陆时，获取不到login_token，就认为没有登陆
+     * @param request
+     * @param response
+     * @return
      */
     @RequestMapping(value = "logout.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session){
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(HttpServletRequest request,HttpServletResponse response){
+        CookieUtil.delLoginToken(request,response);
+        //session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("登出成功");
     }
 
@@ -77,14 +93,21 @@ public class UserController {
     }
 
     /**
-     * 简单的从session中获取登录用户信息
-     * @param session
+     * 获取登陆信息
+     * @param request
      * @return
      */
     @RequestMapping(value = "get_user_info.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<User> getUserInfo(HttpServletRequest request){
+        //从request的Cookie中获取login_token的值
+        String loginToken = CookieUtil.readLoginToken(request);
+        //用login_token的值获取Redis中的User对象
+        String s = RedisPoolUtil.get(loginToken);
+        //Json转User对象
+        User user = JsonUtil.string2Obj(s, User.class);
+
+        //User user = (User)session.getAttribute(Const.CURRENT_USER);
         if (user != null){
             return ServerResponse.createBySuccess(user);
         }

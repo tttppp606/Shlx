@@ -4,10 +4,9 @@ import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
 import com.mmall.pojo.Category;
 import com.mmall.service.ICategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,8 @@ import java.util.Set;
  * Created by tttppp606 on 2019/1/28.
  */
 @Service
+@Slf4j
 public class CategoryServiceImpl implements ICategoryService {
-    Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
-
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -65,7 +63,7 @@ public class CategoryServiceImpl implements ICategoryService {
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(parentId);
         if (CollectionUtils.isEmpty(categoryList)){
             //如果没找到categoryList，说明前端传过来的categoryId是最底层的，没有子类，这时不能报错，而是输出日志，返回null
-            logger.info("未找到当前分类的子分类");
+            log.info("未找到当前分类的子分类");
         }
         return ServerResponse.createBySuccess(categoryList);
     }
