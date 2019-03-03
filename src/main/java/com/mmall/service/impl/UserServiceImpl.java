@@ -2,11 +2,11 @@ package com.mmall.service.impl;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
-import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
+import com.mmall.util.RedisPoolUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,12 +127,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
         int checkAnswer = userMapper.checkAnswer(username, question, answer);
-/*      guava缓存:密码提示问题校验成功后，允许前端修改密码是有时效的。
-        当修改密码时，有token，就可以改密码，没有token，就不能修改密码。
-        而token是一个随机数，存在缓存中，并设置了存储在缓存中的时间*/
+/*guava缓存:密码提示问题校验成功后，允许前端修改密码是有时效的。
+            我们将“固定前缀”+ username = 随机数 放入缓存中，设置时效，将随机数返回前端。
+            将当修改密码时，检查前端传来的随机数，与缓存中的 随机数对比
+            1、缓存中随机数不存在，时间过期
+            2、缓存中随机数与前端的随机数不一样，身份不符合*/
         if(checkAnswer > 0){
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username,forgetToken);
+            RedisPoolUtil.setEx(Const.TOKEN_PREFIX+username,forgetToken,60 * 60 *12);
+//            String forgetToken = UUID.randomUUID().toString();
+//            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username,forgetToken);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -150,7 +154,8 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
 //      查看这个username的token是否过期，前端也会传来一个token，但是判断是否过期还是后端从缓存中判断原token是否过期
-        String token = TokenCache.getValue(TokenCache.TOKEN_PREFIX + username);
+            String token = RedisPoolUtil.get(Const.TOKEN_PREFIX + username);
+//        String token = TokenCache.getValue(TokenCache.TOKEN_PREFIX + username);
         if (StringUtils.isBlank(token)){
             return ServerResponse.createByErrorMessage("token无效或过期");
         }

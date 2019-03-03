@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
  * Created by tttppp606 on 2019/1/26.
  */
 public class TokenCache {
-//    将TokenCache.class加入日志中
     private static Logger logger= LoggerFactory.getLogger(TokenCache.class);
     public static final String TOKEN_PREFIX = "token_";
 

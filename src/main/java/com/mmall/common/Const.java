@@ -14,6 +14,8 @@ public class Const {
    //检查username和email是否重复时，checkVaild的两种类型
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
+    //密码提示问题通过，设定的token，防止验证之后一直可以修改密码的问题
+    public static final String TOKEN_PREFIX = "token_";
    //检测是否是管理员
     public interface Role{
         int ROLE_CUSTOMER = 0;

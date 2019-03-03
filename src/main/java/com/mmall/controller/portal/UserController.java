@@ -8,6 +8,7 @@ import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,16 +103,18 @@ public class UserController {
     public ServerResponse<User> getUserInfo(HttpServletRequest request){
         //从request的Cookie中获取login_token的值
         String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
         //用login_token的值获取Redis中的User对象
         String s = RedisPoolUtil.get(loginToken);
         //Json转User对象
         User user = JsonUtil.string2Obj(s, User.class);
-
-        //User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if (user != null){
-            return ServerResponse.createBySuccess(user);
+        //防止往Cookie中手动添加loign_token,而被判断处于登录状态
+        if (user == null){
+            return ServerResponse.createByErrorMessage("无此用户");
         }
-        return ServerResponse.createByErrorMessage("用户未登陆，无法获取当前用户信息");
+        return ServerResponse.createBySuccess(user);
     }
 
     /**
@@ -154,61 +157,79 @@ public class UserController {
 
     /**
      * 登陆后重置密码
-     * @param session
+     * @param request
      * @param passwordOld
      * @param passwordNew
      * @return
      */
     @RequestMapping(value = "reset_password.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> resetPassword(HttpSession session,String passwordOld,String passwordNew){
+    public ServerResponse<String> resetPassword(HttpServletRequest request,String passwordOld,String passwordNew){
 //        判断是否登陆后时间过长（超过session的时间）或者未登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if(user == null){
-            return ServerResponse.createByErrorMessage("用户未登陆");
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
+        if (user == null){
+            return ServerResponse.createByErrorMessage("无此用户");
         }
         return iUserService.resetPassword(passwordOld,passwordNew,user);
     }
 
     /**
      * 更新信息
-     * @param session
+     * @param request
      * @param user
      * @return
      */
     @RequestMapping(value = "update_information.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> updateInformation(HttpSession session,User user){
+    public ServerResponse<User> updateInformation(HttpServletRequest request,User user){
     //todo校验修改过的user中的名字和id与session中的一致
-    //判断是否登陆后时间过长（超过session的时间）或者未登陆
-        User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
-        if(currentUser == null){
-            return ServerResponse.createByErrorMessage("用户未登陆");
+    //判断是否未登陆
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User currentUser = JsonUtil.string2Obj(s, User.class);
+        if (currentUser == null){
+            return ServerResponse.createByErrorMessage("无此用户");
         }
 //        前端传过来的user中只包含邮箱，问题，答案，手机
         user.setId(currentUser.getId());
 //        user.setUsername(currentUser.getUsername());
-        ServerResponse<User> response = iUserService.updateInformation(user);
-        if(response.isSuccess()){
+        ServerResponse<User> result = iUserService.updateInformation(user);
+        if(result.isSuccess()){
 //          补全session中的数据
-            response.getData().setUsername(currentUser.getUsername());
-            response.getData().setRole(currentUser.getRole());
-            session.setAttribute(Const.CURRENT_USER,response.getData());
+            result.getData().setUsername(currentUser.getUsername());
+            result.getData().setRole(currentUser.getRole());
+            RedisPoolUtil.setEx(loginToken,JsonUtil.obj2String(result.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
-        return response;
+        return result;
     }
 
     /**
      * 从数据库获取详细用户完整信息：便于以后扩展，不同于从session中简单的获取用户信息
      * 强制登陆：扩展使用！！！！！！！！！！！1
-     * @param session
+     * @param request
      * @return
      */
     @RequestMapping(value = "get_information.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse getInformation(HttpSession session){
+    public ServerResponse getInformation(HttpServletRequest request){
         //判断是否登陆
-        User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User currentUser = JsonUtil.string2Obj(s, User.class);
+        if (currentUser == null){
+            return ServerResponse.createByErrorMessage("无此用户");
+        }
         if (currentUser == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录,需要强制登录status=10");
         }

@@ -1,12 +1,15 @@
 package com.mmall.controller.portal;
 
 import com.github.pagehelper.PageInfo;
-import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Shipping;
 import com.mmall.pojo.User;
 import com.mmall.service.IShippingService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by tttppp606 on 2019/2/8.
@@ -27,8 +30,13 @@ public class ShippingController {
 
     @RequestMapping(value = "add.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse add(HttpSession session, Shipping shipping){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse add(HttpServletRequest request, Shipping shipping){
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -37,8 +45,13 @@ public class ShippingController {
 
     @RequestMapping(value = "del.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse delete(HttpSession session, Integer shippingId){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse delete(HttpServletRequest request, Integer shippingId){
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -47,8 +60,13 @@ public class ShippingController {
 
     @RequestMapping(value = "update.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse update(HttpSession session, Shipping shipping){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse update(HttpServletRequest request, Shipping shipping){
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -57,8 +75,13 @@ public class ShippingController {
 
     @RequestMapping(value = "select.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<Shipping> select(HttpSession session,Integer shippingId){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<Shipping> select(HttpServletRequest request,Integer shippingId){
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -67,10 +90,15 @@ public class ShippingController {
 
     @RequestMapping(value = "list.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<PageInfo> list(HttpSession session,
+    public ServerResponse<PageInfo> list(HttpServletRequest request,
                                          @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                          @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createBySuccessMessage("用户未登陆");
+        }
+        String s = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
         }
