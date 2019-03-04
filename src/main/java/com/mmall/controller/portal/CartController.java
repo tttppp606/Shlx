@@ -7,7 +7,7 @@ import com.mmall.pojo.User;
 import com.mmall.service.ICartService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisPoolUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import com.mmall.vo.CartVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class CartController {
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
         //用login_token的值获取Redis中的User对象
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         //Json转User对象
         User user = JsonUtil.string2Obj(s, User.class);
         //防止往Cookie中手动添加loign_token,而被判断处于登录状态
@@ -52,7 +52,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -67,7 +67,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -88,7 +88,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -103,7 +103,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -118,7 +118,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -133,7 +133,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -148,7 +148,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
@@ -163,7 +163,7 @@ public class CartController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());

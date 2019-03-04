@@ -7,7 +7,7 @@ import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisPoolUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class UserController {
             //新建一个Cookie：COOKIE_NAME = session.getId()
             CookieUtil.writeLoginToken(httpServletResponse,session.getId());
             //将session.getId() = User对象 放入Redis缓存中
-            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+            RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
 
             // 返回的user放入session中，这样用户长时间登陆后，到时间会自动清除用户的sesion，防止长时间没在，还能修改密码的漏洞
             // session.setAttribute(Const.CURRENT_USER,response.getData());
@@ -107,7 +107,7 @@ public class UserController {
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
         //用login_token的值获取Redis中的User对象
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         //Json转User对象
         User user = JsonUtil.string2Obj(s, User.class);
         //防止往Cookie中手动添加loign_token,而被判断处于登录状态
@@ -170,7 +170,7 @@ public class UserController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(s, User.class);
         if (user == null){
             return ServerResponse.createByErrorMessage("无此用户");
@@ -193,7 +193,7 @@ public class UserController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User currentUser = JsonUtil.string2Obj(s, User.class);
         if (currentUser == null){
             return ServerResponse.createByErrorMessage("无此用户");
@@ -206,7 +206,7 @@ public class UserController {
 //          补全session中的数据
             result.getData().setUsername(currentUser.getUsername());
             result.getData().setRole(currentUser.getRole());
-            RedisPoolUtil.setEx(loginToken,JsonUtil.obj2String(result.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+            RedisShardedPoolUtil.setEx(loginToken,JsonUtil.obj2String(result.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
         return result;
     }
@@ -225,7 +225,7 @@ public class UserController {
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createBySuccessMessage("用户未登陆");
         }
-        String s = RedisPoolUtil.get(loginToken);
+        String s = RedisShardedPoolUtil.get(loginToken);
         User currentUser = JsonUtil.string2Obj(s, User.class);
         if (currentUser == null){
             return ServerResponse.createByErrorMessage("无此用户");
