@@ -1,14 +1,8 @@
 package com.mmall.controller.backend;
 
-import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
-import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
 import com.mmall.service.IUserService;
-import com.mmall.util.CookieUtil;
-import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisShardedPoolUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,19 +27,7 @@ public class OrderManageController {
     public ServerResponse list(HttpServletRequest request,
                                @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize){
-        String loginToken = CookieUtil.readLoginToken(request);
-        if (StringUtils.isEmpty(loginToken)){
-            return ServerResponse.createBySuccessMessage("用户未登陆");
-        }
-        String s = RedisShardedPoolUtil.get(loginToken);
-        User user = JsonUtil.string2Obj(s, User.class);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()){
-            return iOrderService.manageList(pageNum,pageSize);
-        }
-        return ServerResponse.createByErrorMessage("无权限");
+        return iOrderService.manageList(pageNum,pageSize);
     }
 
     @RequestMapping("search.do")
@@ -53,58 +35,19 @@ public class OrderManageController {
     public ServerResponse search(HttpServletRequest request,Long orderNo,//增加分页是为了以后模糊查询扩展
                                  @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                  @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize){
-        String loginToken = CookieUtil.readLoginToken(request);
-        if (StringUtils.isEmpty(loginToken)){
-            return ServerResponse.createBySuccessMessage("用户未登陆");
-        }
-        String s = RedisShardedPoolUtil.get(loginToken);
-        User user = JsonUtil.string2Obj(s, User.class);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()){
-            return iOrderService.manageSearch(orderNo,pageNum,pageSize);
-        }
-        return ServerResponse.createByErrorMessage("无权限");
+        return iOrderService.manageSearch(orderNo,pageNum,pageSize);
     }
 
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse detail(HttpServletRequest request,Long orderNo){
-        String loginToken = CookieUtil.readLoginToken(request);
-        if (StringUtils.isEmpty(loginToken)){
-            return ServerResponse.createBySuccessMessage("用户未登陆");
-        }
-        String s = RedisShardedPoolUtil.get(loginToken);
-        User user = JsonUtil.string2Obj(s, User.class);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()){
-            return iOrderService.manageDetail(orderNo);
-        }
-        return ServerResponse.createByErrorMessage("无权限");
+        return iOrderService.manageDetail(orderNo);
     }
 
     @RequestMapping("send_goods.do")
     @ResponseBody
     public ServerResponse orderSendGoods(HttpServletRequest request,Long orderNo){
-        String loginToken = CookieUtil.readLoginToken(request);
-        if (StringUtils.isEmpty(loginToken)){
-            return ServerResponse.createBySuccessMessage("用户未登陆");
-        }
-        String s = RedisShardedPoolUtil.get(loginToken);
-        User user = JsonUtil.string2Obj(s, User.class);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()){
-            return iOrderService.orderSendGoods(orderNo);
-        }
-        return ServerResponse.createByErrorMessage("无权限");
+        return iOrderService.orderSendGoods(orderNo);
     }
-
-
-
 
 }

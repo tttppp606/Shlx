@@ -5,6 +5,21 @@
          id="WebApp_ID" version="3.0">
     <!--描述性说明-->
     <display-name>Archetype Created Web Application</display-name>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
     <!--加载applicationContext.xml，将数据放入ServletContext中-->
 
     <!--可选项-->
@@ -16,7 +31,7 @@
     </listener>
     <!-- 生产WebApplicationContext:web容器和Spring容器结合。
         ContextLoaderListener实例化，调用一个叫initXXX的方法，读取ServletContext中applicationContext.xml的内容，
-        将Spring容器applicationContext与web容器融合，创建webapplicationContext-->
+        将Spring容器applicationContext与web容器融合，创建webApplicationContext-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -56,16 +71,6 @@
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
 
-
-    <servlet>
-        <servlet-name>dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.do</url-pattern>
-    </servlet-mapping>
 
 </web-app>
 

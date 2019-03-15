@@ -41,7 +41,7 @@ public class UserController {
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpServletResponse){
-
+        int i = 1/0;
         ServerResponse<User> response = iUserService.login(username, password);
         if(response.isSuccess()){
             //新建一个Cookie：COOKIE_NAME = session.getId()

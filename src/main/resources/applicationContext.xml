@@ -8,12 +8,20 @@
      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-     <!--扫描com.mmall下的所有注解-->
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+    <context:component-scan base-package="com.mmall" annotation-config="true">
+        <!--扫描器排除@Controller注解的代码-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
+    <!--annotation-config="true"下面的无用-->
     <!--<context:annotation-config/>-->
     <aop:aspectj-autoproxy/>
 
+
+    <!--指定加载properties文件的位置-->
+    <context:property-placeholder location="datasource.properties"/>
+
+    <!--Spring中整合Mybatis的配置文件位置-->
     <import resource="applicationContext-datasource.xml"/>
 
 </beans>

@@ -54,7 +54,7 @@ public class FileServiceImpl implements IFileService {
              targetFile.delete();
         } catch (IOException e) {
             logger.error("文件上传失败",e);
-            e.printStackTrace();
+            return ServerResponse.createByErrorMessage("文件上传失败");
         }
         HashMap<String, String> map = new HashMap<>();
         map.put("uri",targetFile.getName());

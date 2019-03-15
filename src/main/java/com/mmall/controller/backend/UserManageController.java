@@ -33,13 +33,14 @@ public class UserManageController {
         if(response.isSuccess()){
             if (response.getData().getRole() == Const.Role.ROLE_ADMIN){
                 CookieUtil.writeLoginToken(httpServletResponse,session.getId());
+                //对User对象做序列化，转为Json字符串，为的是能放入String类型的缓存中
                 RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
                 return response;
             }else {
                 return ServerResponse.createByErrorMessage("不是管理员,无法登录");
             }
         }
-        //返回response！！！！！
+        //返回response！！！！！,也是一个ServerResponse<User>
         return response;
     }
 }

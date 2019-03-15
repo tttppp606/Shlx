@@ -8,9 +8,14 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+    <!--use-default-filters="false"表示：只扫描符合base-package="com.mmall.controller"和<context:include-filter里的-->
+    <context:component-scan base-package="com.mmall.controller" annotation-config="true" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
     <!--<mvc:annotation-driven>驱动配置：配置了HandlerMapping和HanderAdapter-->
     <mvc:annotation-driven>
+        <!--HttpMessageConverter实现类是SpringMVC用于处理请求报文和响应报文的数据的转换器-->
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                 <property name="supportedMediaTypes">
@@ -30,14 +35,23 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
-
     <!-- 文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10485760"/> <!-- 上传文件最大字节 -->
         <property name="maxInMemorySize" value="4096" /><!-- 内存块最大字节 -->
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--manager/*代表manager子目录-->
+            <!--/manager/**代表manager子目录的子目录-->
+            <mvc:mapping path="/manage/**"/>
+            <mvc:exclude-mapping path="/manage/user/login.do"/>
+            <bean class="com.mmall.controller.common.interceptor.AuthorityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 
 </beans>

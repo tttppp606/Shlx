@@ -9,7 +9,6 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
     <!--常量分离-->
     <!--PropertyPlaceholderConfigurer可以将配置的属性值分离到这里或者外部properties文件里-->
     <bean id="propertyConfigurer"
@@ -23,7 +22,6 @@
             </list>
         </property>
     </bean>
-
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${db.driverClassName}"/>
@@ -58,10 +56,13 @@
         <property name="validationQuery" value="SELECT 1 FROM dual"/>
     </bean>
 
+
+    <!--SqlSessionFactoryBean：在Spring容器中生成sqlSession的类，sqlSession用于执行增删改查-->
+    <!--对应service中的InputStream is = Resources.getResourceAsStream("mybatis.xml");
+                       SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
-
         <!-- 分页插件 -->
         <property name="plugins">
             <array>
@@ -74,20 +75,20 @@
                 </bean>
             </array>
         </property>
-
     </bean>
 
+    <!--MapperScannerConfigurer负责将接口放入sqlSessionFactory中-->
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.mmall.dao"/>
     </bean>
 
-    <!-- ？？？？？使用@Transactional进行声明式事务管理需要声明下面这行 -->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-    <!-- 事务管理 -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="rollbackOnCommitFailure" value="true"/>
-    </bean>
+    <!--&lt;!&ndash; ？？？？？使用@Transactional进行声明式事务管理需要声明下面这行 &ndash;&gt;-->
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />-->
+    <!--&lt;!&ndash; 事务管理 &ndash;&gt;-->
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="rollbackOnCommitFailure" value="true"/>-->
+    <!--</bean>-->
 
 
 </beans>
